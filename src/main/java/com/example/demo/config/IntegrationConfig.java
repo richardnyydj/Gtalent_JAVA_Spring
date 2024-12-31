@@ -1,5 +1,7 @@
 package com.example.demo.config;
 
+import java.io.File;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,14 +9,9 @@ import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.config.EnableIntegration;
 import org.springframework.integration.file.FileReadingMessageSource;
 import org.springframework.integration.file.FileWritingMessageHandler;
+import org.springframework.integration.file.filters.SimplePatternFileListFilter;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
-import org.springframework.integration.file.filters.SimplePatternFileListFilter;
-import org.springframework.integration.dsl.IntegrationFlow;
-import org.springframework.integration.dsl.IntegrationFlows;
-import org.springframework.integration.dsl.Pollers;
-
-import java.io.File;
 
 @Configuration
 @EnableIntegration
@@ -69,13 +66,13 @@ public class IntegrationConfig {
     }
 
     // 設置文件源和處理器之間的整合
-    @Bean
-    public IntegrationFlow fileIntegrationFlow() {
-        return IntegrationFlows.from(fileReadingMessageSource(),
-                c -> c.poller(Pollers.fixedDelay(5000)
-                        .maxMessagesPerPoll(10)))  // 每次輪詢的消息數上限(10次)
-                .channel(inputChannel())
-                .handle(fileWriter())
-                .get();
-    }
+//     @Bean
+//     public IntegrationFlow fileIntegrationFlow() {
+//         return IntegrationFlows.from(fileReadingMessageSource(),
+//             c -> (IntegrationFlowDefinition<?>) c.poller(Pollers.fixedDelay(5000)
+//                     .maxMessagesPerPoll(10)))  // 每次輪詢的消息數上限(10次)
+//             .channel(inputChannel())
+//             .handle(fileWriter())
+//             .get();
+// }
 }

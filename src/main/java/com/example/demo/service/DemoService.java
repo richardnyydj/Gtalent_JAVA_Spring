@@ -16,6 +16,10 @@ public class DemoService {
         return this.demoRepository.findByName(name);
     }
 
+    public DemoModel getUserById(int id) {
+        return this.demoRepository.findById(id);
+    }
+
     public DemoModel createUserByName(String name) {
         DemoModel model = new DemoModel();
         model.setName(name);
@@ -26,4 +30,3 @@ public class DemoService {
         System.out.println("Task is being performed.");
     }
 }
-
