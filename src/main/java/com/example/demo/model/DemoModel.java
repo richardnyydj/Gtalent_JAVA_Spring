@@ -14,7 +14,7 @@ public class DemoModel {
 
     public DemoModel() {
     }
-    
+
     public DemoModel(int id, String name) {
         this.id = id;
         this.name = name;

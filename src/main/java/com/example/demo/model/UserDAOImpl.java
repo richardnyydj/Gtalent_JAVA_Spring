@@ -3,9 +3,9 @@ package com.example.demo.model;
 import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
-import jakarta.persistence.NoResultException;
 
 @Repository
 public class UserDAOImpl implements UserDAOInterface {
@@ -40,7 +40,7 @@ public class UserDAOImpl implements UserDAOInterface {
     }
 
     @Override
-    public User findUserWithPostsById(int id) {
+    public User findUserWithPosts(int id) {
         // 以下寫法會有N+1問題
         // User user = findById(id);
         // user.getPosts();
