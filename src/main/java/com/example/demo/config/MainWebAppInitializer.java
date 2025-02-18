@@ -17,5 +17,3 @@ public class MainWebAppInitializer implements WebApplicationInitializer {
         dispatcher.addMapping("/");
     }
 }
-    
-    

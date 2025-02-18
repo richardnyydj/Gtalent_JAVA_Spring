@@ -1,0 +1,73 @@
+name: Deploy Java App to GCP VM
+
+on:
+  push:
+    branches:
+      - main  # Change to your main deployment branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Restore keystore.p12 from GitHub Secret
+      run: |
+        mkdir -p src/main/resources/cert
+        echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > src/main/resources/cert/keystore.p12
+
+    - name: Set up JDK 23
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'oracle'
+        java-version: '23'
+
+    - name: Set up Maven 3.9.9
+      run: |
+        curl -fsSL https://dlcdn.apache.org/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.tar.gz | tar xz
+        echo "$(pwd)/apache-maven-3.9.9/bin" >> $GITHUB_PATH
+        mvn -version
+
+    - name: Build the project
+      run: |
+        mvn clean package -DskipTests  # Skip tests for faster builds
+
+    - name: Generate Tag
+      id: generate_tag
+      run: |
+        TAG_NAME="v$(date +'%Y%m%d-%H%M%S')"
+        echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
+        echo "Generated Tag: $TAG_NAME"
+
+    - name: Create Git Tag
+      run: |
+        git tag $TAG_NAME
+        git push origin $TAG_NAME
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload JAR to GitHub Releases
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ env.TAG_NAME }}
+        files: target/*.jar
+        body: "Auto-generated release ${{ env.TAG_NAME }}"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Set up SSH connection
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.GCP_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ vars.GCP_VM_IP }} >> ~/.ssh/known_hosts
+
+    - name: Deploy JAR to GCP VM
+      run: |
+        scp -i ~/.ssh/id_rsa target/*.jar ${{ vars.GCP_VM_USER }}@${{ vars.GCP_VM_IP }}:/home/${{ vars.GCP_VM_USER }}/app.jar
+        ssh -i ~/.ssh/id_rsa ${{ vars.GCP_VM_USER }}@${{ vars.GCP_VM_IP }} << 'EOF'
+          sudo pkill -f "java -jar" || true
+          nohup sudo java -jar /home/${{ vars.GCP_VM_USER }}/app.jar --spring.config.location=/home/${{ vars.GCP_VM_USER }}/application.properties > app.log 2>&1 &
+        EOF
