@@ -148,7 +148,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-messaging</artifactId>
-			<version>3.2.2</version>  <!-- 使用與 spring-boot-starter-parent 相容的版本 -->
 		</dependency>
 
 		<!-- security test dependencies -->
