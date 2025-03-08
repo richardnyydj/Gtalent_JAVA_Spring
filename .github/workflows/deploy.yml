@@ -74,5 +74,8 @@ jobs:
     - name: Clear Maven Cache
       run: mvn dependency:purge-local-repository
 
+    - name: Clear and Download Dependencies
+      run: mvn dependency:purge-local-repository
+
     - name: Build the project
       run: mvn clean install
