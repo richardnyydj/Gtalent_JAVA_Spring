@@ -132,6 +132,31 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+    	<!-- Spring Boot Starter AMQP (RabbitMQ) -->
+    	<dependency>
+        	<groupId>org.springframework.boot</groupId>
+        	<artifactId>spring-boot-starter-amqp</artifactId>
+    	</dependency>
+
+    	<!-- Spring Boot Starter WebSocket -->
+    	<dependency>
+        	<groupId>org.springframework.boot</groupId>
+        	<artifactId>spring-boot-starter-websocket</artifactId>
+    	</dependency>
+
+		<!-- Spring Boot Starter Messaging -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-messaging</artifactId>
+			<version>3.2.0</version> <!-- 確保這是最新版本 -->
+		</dependency>
+
+		<!-- Spring Boot Starter Web (如果沒有的話) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
 		<!-- security test dependencies -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
