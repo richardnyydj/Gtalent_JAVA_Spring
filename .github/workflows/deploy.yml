@@ -72,10 +72,7 @@ jobs:
           nohup sudo java -jar /home/${{ vars.GCP_VM_USER }}/app.jar --spring.config.location=/home/${{ vars.GCP_VM_USER }}/application.properties > app.log 2>&1 &
         EOF
     - name: Clear Maven Cache
-      run: mvn dependency:purge-local-repository
+      run: rm -rf ~/.m2/repository
 
-    - name: Clear and Download Dependencies
-      run: mvn dependency:purge-local-repository
-
-    - name: Build the project
-      run: mvn clean install
+    - name: Force Update Dependencies
+      run: mvn clean install -U

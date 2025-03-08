@@ -34,6 +34,7 @@
 		<mysql.version>8.0.33</mysql.version>
 	</properties>
 	<dependencies>
+		<!-- Spring Boot Starter Web -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -147,12 +148,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-messaging</artifactId>
-		</dependency>
-
-		<!-- Spring Boot Starter Web (如果沒有的話) -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
+			<version>3.2.2</version>  <!-- 使用與 spring-boot-starter-parent 相容的版本 -->
 		</dependency>
 
 		<!-- security test dependencies -->
